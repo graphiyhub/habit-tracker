@@ -7,6 +7,7 @@ function chartColors() {
   return {
     accent: styles.getPropertyValue("--accent").trim(),
     green: styles.getPropertyValue("--green").trim(),
+    missed: styles.getPropertyValue("--orange").trim(),
     muted: styles.getPropertyValue("--muted").trim(),
     border: styles.getPropertyValue("--border").trim(),
     surface: styles.getPropertyValue("--surface").trim()
@@ -76,13 +77,16 @@ export function renderAnalyticsCharts(state, date, startOfWeek, selectedHabitId 
   const colors = chartColors();
   Chart.defaults.color = colors.muted;
   Chart.defaults.font.family = '"DM Sans", sans-serif';
-  Chart.defaults.font.size = 10;
+  Chart.defaults.font.size = 13;
   const options = {
     responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
+    plugins: {
+      legend: { display: false, labels: { boxWidth: 10, boxHeight: 10, usePointStyle: true, padding: 16, font: { size: 13 } } },
+      tooltip: { titleFont: { size: 14, weight: "600" }, bodyFont: { size: 13 }, padding: 12, displayColors: true }
+    },
     scales: {
-      x: { grid: { display: false }, border: { display: false } },
-      y: { beginAtZero: true, grid: { color: colors.border }, border: { display: false }, ticks: { precision: 0 } }
+      x: { grid: { display: false }, border: { display: false }, ticks: { padding: 8 } },
+      y: { beginAtZero: true, grid: { color: colors.border + "88" }, border: { display: false }, ticks: { precision: 0, padding: 8 } }
     }
   };
   const week = weeklyStats(state, date, startOfWeek, state.habits);
@@ -93,7 +97,7 @@ export function renderAnalyticsCharts(state, date, startOfWeek, selectedHabitId 
       label: "Completion", data: week.dates.map(day => dayStats(state, localDate(day), state.habits).percent),
       borderColor: colors.accent, backgroundColor: colors.accent + "22", fill: true, tension: .35, pointRadius: 3
     }] },
-    options: { ...options, scales: { ...options.scales, y: { ...options.scales.y, max: 100, ticks: { callback: value => `${value}%` } } } }
+    options: { ...options, plugins: { ...options.plugins, legend: { ...options.plugins.legend, display: true, position: "bottom" } }, scales: { ...options.scales, y: { ...options.scales.y, max: 100, ticks: { padding: 8, callback: value => `${value}%` } } } }
   }));
   const breakdownCanvas = document.getElementById("weeklyBreakdownChart");
   if (breakdownCanvas) {
@@ -108,10 +112,10 @@ export function renderAnalyticsCharts(state, date, startOfWeek, selectedHabitId 
         labels: week.dates.map(day => day.toLocaleDateString(undefined, { weekday: "short" })),
         datasets: [
           { label: "Completed", data: daily.map(item => item.stats.done), backgroundColor: colors.green, borderRadius: 4 },
-          { label: "Missed", data: daily.map(item => item.past ? item.stats.due - item.stats.done : 0), backgroundColor: colors.border, borderRadius: 4 }
+          { label: "Missed", data: daily.map(item => item.past ? item.stats.due - item.stats.done : 0), backgroundColor: colors.missed, borderRadius: 5 }
         ]
       },
-      options: { ...options, plugins: { legend: { display: true, position: "bottom", labels: { boxWidth: 8, usePointStyle: true } } } }
+      options: { ...options, plugins: { ...options.plugins, legend: { ...options.plugins.legend, display: true, position: "bottom" } }, datasets: { bar: { categoryPercentage: .72, barPercentage: .8 } } }
     }));
   }
   const monthStart = new Date(date.getFullYear(), date.getMonth(), 1, 12);
@@ -130,9 +134,9 @@ export function renderAnalyticsCharts(state, date, startOfWeek, selectedHabitId 
     type: "bar",
     data: { labels: weeklyBuckets.map((item, index) => `Week ${index + 1}`), datasets: [
       { label: "Completed", data: weeklyBuckets.map(item => item.done), backgroundColor: colors.green, borderRadius: 4 },
-      { label: "Missed", data: weeklyBuckets.map(item => Math.max(0, item.due - item.done)), backgroundColor: colors.border, borderRadius: 4 }
+      { label: "Missed", data: weeklyBuckets.map(item => Math.max(0, item.due - item.done)), backgroundColor: colors.missed, borderRadius: 5 }
     ] },
-    options: { ...options, plugins: { legend: { display: true, position: "bottom", labels: { boxWidth: 8, usePointStyle: true } } } }
+    options: { ...options, plugins: { ...options.plugins, legend: { ...options.plugins.legend, display: true, position: "bottom" } }, datasets: { bar: { categoryPercentage: .72, barPercentage: .8 } } }
   }));
   const habitCanvas = document.getElementById("habitTrendChart");
   if (habitCanvas) {
@@ -142,7 +146,7 @@ export function renderAnalyticsCharts(state, date, startOfWeek, selectedHabitId 
       data: { labels: metrics.map(item => item.habit.name), datasets: [{
         data: metrics.map(item => item.monthly.percent), backgroundColor: colors.accent, borderRadius: 5
       }] },
-      options: { ...options, indexAxis: "y", scales: { x: { ...options.scales.x, max: 100, ticks: { callback: value => `${value}%` } }, y: { ...options.scales.y, grid: { display: false } } } }
+      options: { ...options, indexAxis: "y", scales: { x: { ...options.scales.x, max: 100, ticks: { padding: 8, callback: value => `${value}%` } }, y: { ...options.scales.y, grid: { display: false } } } }
     }));
   }
   const historyCanvas = document.getElementById("habitHistoryChart");
