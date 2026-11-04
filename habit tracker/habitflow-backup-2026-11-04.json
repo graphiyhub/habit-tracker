@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "habits": [
+    {
+      "name": "Morning movement",
+      "description": "Start the day with a little movement.",
+      "category": "Health & Fitness",
+      "icon": "🏃",
+      "color": "#5b8def",
+      "weeklyTarget": 5,
+      "days": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "startDate": "",
+      "reminder": "",
+      "status": "active",
+      "id": "starter-1",
+      "createdAt": "2026-11-04T08:26:52.213Z"
+    },
+    {
+      "name": "Read a few pages",
+      "description": "Make time for a good book.",
+      "category": "Learning",
+      "icon": "📚",
+      "color": "#9b7bea",
+      "weeklyTarget": 4,
+      "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        0
+      ],
+      "startDate": "",
+      "reminder": "",
+      "status": "active",
+      "id": "starter-2",
+      "createdAt": "2026-11-04T08:26:52.213Z"
+    },
+    {
+      "name": "Plan tomorrow",
+      "description": "Close the day with a clear plan.",
+      "category": "Personal Development",
+      "icon": "📝",
+      "color": "#e5a84b",
+      "weeklyTarget": 5,
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "startDate": "",
+      "reminder": "",
+      "status": "active",
+      "id": "starter-3",
+      "createdAt": "2026-11-04T08:26:52.213Z"
+    },
+    {
+      "name": "QA temporary habit",
+      "description": "",
+      "category": "Health & Fitness",
+      "icon": "🏃",
+      "color": "#6258e8",
+      "weeklyTarget": 1,
+      "days": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "startDate": "2026-11-04",
+      "reminder": "",
+      "id": "05b8bae4-b22e-4533-903b-ae2a63718092",
+      "status": "active",
+      "createdAt": "2026-11-04T08:30:16.059Z"
+    }
+  ],
+  "completions": {
+    "2026-11-04": [
+      "starter-1"
+    ]
+  },
+  "reviews": {},
+  "settings": {
+    "theme": "light",
+    "startOfWeek": 1,
+    "defaultView": "dashboard",
+    "notifications": false,
+    "confirmDestructive": true
+  }
+}
